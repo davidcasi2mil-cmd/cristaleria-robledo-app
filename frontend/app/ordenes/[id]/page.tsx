@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
@@ -42,9 +42,10 @@ const ESTADO_COLORS: Record<string, string> = {
   CANCELADA: 'bg-red-100 text-red-800',
 };
 
-export default function DetalleOrdenPage({ params }: { params: { id: string } }) {
+export default function DetalleOrdenPage({ params }: { params: Promise<{ id: string }> }) {
   const { token } = useAuthStore();
   const router = useRouter();
+  const { id } = use(params);
   const [orden, setOrden] = useState<Orden | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -58,7 +59,7 @@ export default function DetalleOrdenPage({ params }: { params: { id: string } })
 
     const fetchOrden = async () => {
       try {
-        const res = await api.get(`/ordenes/${params.id}`);
+        const res = await api.get(`/ordenes/${id}`);
         setOrden(res.data.orden ?? res.data);
       } catch {
         setError('No se pudo cargar la orden');
@@ -68,7 +69,7 @@ export default function DetalleOrdenPage({ params }: { params: { id: string } })
     };
 
     fetchOrden();
-  }, [token, router, params.id]);
+  }, [token, router, id]);
 
   if (loading) {
     return <div className="p-8 text-center text-gray-400">Cargando...</div>;

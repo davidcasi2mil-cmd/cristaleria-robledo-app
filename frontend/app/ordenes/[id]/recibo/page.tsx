@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
@@ -35,9 +35,10 @@ const ESTADO_LABELS: Record<string, string> = {
   CANCELADA: 'Cancelada',
 };
 
-export default function ReciboPage({ params }: { params: { id: string } }) {
+export default function ReciboPage({ params }: { params: Promise<{ id: string }> }) {
   const { token } = useAuthStore();
   const router = useRouter();
+  const { id } = use(params);
   const [orden, setOrden] = useState<Orden | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -51,7 +52,7 @@ export default function ReciboPage({ params }: { params: { id: string } }) {
 
     const fetchOrden = async () => {
       try {
-        const res = await api.get(`/ordenes/${params.id}`);
+        const res = await api.get(`/ordenes/${id}`);
         setOrden(res.data.orden ?? res.data);
       } catch {
         setError('No se pudo cargar la orden');
@@ -61,7 +62,7 @@ export default function ReciboPage({ params }: { params: { id: string } }) {
     };
 
     fetchOrden();
-  }, [token, router, params.id]);
+  }, [token, router, id]);
 
   const handleExportPDF = async () => {
     if (!orden) return;
