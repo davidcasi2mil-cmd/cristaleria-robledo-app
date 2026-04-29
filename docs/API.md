@@ -52,7 +52,7 @@ Registra un nuevo usuario. *(Requiere autenticación de admin)*
   "nombre": "Nuevo Usuario",
   "email": "usuario@cristaleria.com",
   "password": "contraseña123",
-  "rol": "EMPLEADO"
+  "rol": "VENDEDOR"
 }
 ```
 
@@ -64,7 +64,7 @@ Registra un nuevo usuario. *(Requiere autenticación de admin)*
     "id": "clxxx...",
     "nombre": "Nuevo Usuario",
     "email": "usuario@cristaleria.com",
-    "rol": "EMPLEADO"
+    "rol": "VENDEDOR"
   }
 }
 ```

@@ -14,7 +14,7 @@ export const clienteSchema = z.object({
 
 export const lineaOrdenSchema = z.object({
   descripcion: z.string().min(1, 'La descripción es obligatoria'),
-  cantidad: z.number().min(0.01, 'La cantidad debe ser mayor a 0'),
+  cantidad: z.number().min(0.01, 'La cantidad debe ser mayor o igual a 0.01'),
   precioUnit: z.number().min(0, 'El precio no puede ser negativo'),
 });
 
