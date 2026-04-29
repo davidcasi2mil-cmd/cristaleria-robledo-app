@@ -144,6 +144,52 @@ cristaleria-robledo-app/
 └── README.md
 ```
 
+## Despliegue en Producción (GitHub Actions + SSH)
+
+El repositorio incluye un workflow de GitHub Actions (`.github/workflows/deploy.yml`) que:
+
+1. Construye las imágenes Docker de backend y frontend.
+2. Las publica en **GitHub Container Registry (GHCR)**.
+3. Se conecta al servidor por SSH y ejecuta `docker compose pull && docker compose up -d`.
+
+### Secrets requeridos
+
+Configúralos en **Settings → Secrets and variables → Actions** del repositorio:
+
+| Secret | Descripción | Ejemplo |
+|--------|-------------|---------|
+| `DEPLOY_HOST` | IP o hostname del servidor | `203.0.113.10` |
+| `DEPLOY_USER` | Usuario SSH | `ubuntu` |
+| `DEPLOY_SSH_KEY` | Clave privada SSH (contenido completo) | `-----BEGIN OPENSSH...` |
+| `POSTGRES_PASSWORD` | Contraseña de la base de datos | `s3cr3t_db_pass` |
+| `JWT_SECRET` | Clave secreta para JWT | `s3cr3t_jwt_key` |
+| `CORS_ORIGIN` | URL pública del frontend | `http://203.0.113.10:3000` |
+| `NEXT_PUBLIC_API_URL` | URL pública de la API | `http://203.0.113.10:3001/api` |
+
+### Requisitos del servidor
+
+- Docker y Docker Compose v2 instalados.
+- El usuario SSH debe pertenecer al grupo `docker` (o tener acceso a `sudo docker`).
+- Puerto **3000** (frontend) y **3001** (backend) abiertos en el firewall.
+
+### Primer despliegue manual
+
+Si es la primera vez, ejecuta en el servidor:
+
+```bash
+mkdir -p ~/cristaleria-robledo-app
+```
+
+A partir de ese momento, cada `push` a la rama `main` dispara el workflow y actualiza la aplicación automáticamente.
+
+### Levantar la app manualmente en el servidor
+
+```bash
+cd ~/cristaleria-robledo-app
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up -d
+```
+
 ## Documentación
 
 - [API](docs/API.md) - Documentación de todos los endpoints
