@@ -65,7 +65,7 @@ export default function ReciboPage({ params }: { params: { id: string } }) {
 
   const handleExportPDF = async () => {
     if (!orden) return;
-    const { jsPDF } = await import('jspdf');
+    const { default: jsPDF } = await import('jspdf');
     const doc = new jsPDF();
 
     doc.setFontSize(18);

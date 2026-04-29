@@ -21,7 +21,7 @@ export const lineaOrdenSchema = z.object({
 export const ordenSchema = z.object({
   clienteId: z.string().min(1, 'Selecciona un cliente'),
   lineas: z.array(lineaOrdenSchema).min(1, 'Agrega al menos una línea'),
-  descuento: z.number().min(0).max(100).default(0),
+  descuento: z.number().min(0).max(100),
   notas: z.string().optional(),
 });
 
