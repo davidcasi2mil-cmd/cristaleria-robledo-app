@@ -49,7 +49,7 @@ export default function NuevaOrdenPage() {
   const fetchClientes = useCallback(async () => {
     try {
       const res = await api.get('/clientes');
-      setClientes(res.data.clientes ?? res.data ?? []);
+      setClientes(res.data.clientes ?? res.data.datos ?? []);
     } catch {
       setError('No se pudieron cargar los clientes');
     } finally {
