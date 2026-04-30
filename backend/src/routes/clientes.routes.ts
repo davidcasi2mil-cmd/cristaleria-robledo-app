@@ -8,6 +8,7 @@ import {
   obtenerClientePorIdHandler,
   actualizarClienteHandler,
   eliminarClienteHandler,
+  buscarClientePorTelefonoHandler,
 } from '../controllers/clientes.controller';
 
 const router = Router();
@@ -15,6 +16,7 @@ const router = Router();
 router.use(autenticar);
 
 router.get('/', obtenerClientesHandler);
+router.get('/buscar', buscarClientePorTelefonoHandler);
 router.post('/', validar(clienteSchema), crearClienteHandler);
 router.get('/:id', obtenerClientePorIdHandler);
 router.put('/:id', validar(actualizarClienteSchema), actualizarClienteHandler);

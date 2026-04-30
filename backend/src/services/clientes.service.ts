@@ -63,3 +63,9 @@ export const eliminarCliente = async (id: string) => {
   await obtenerClientePorId(id);
   return prisma.cliente.update({ where: { id }, data: { activo: false } });
 };
+
+export const buscarClientePorTelefono = async (telefono: string) => {
+  return prisma.cliente.findFirst({
+    where: { telefono, activo: true },
+  });
+};

@@ -41,6 +41,29 @@ export const obtenerOrdenPorIdHandler = async (req: RequestConUsuario, res: Resp
   }
 };
 
+export const obtenerOrdenPorNumeroHandler = async (req: RequestConUsuario, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const numero = parseInt(req.params.numero);
+    if (isNaN(numero)) {
+      res.status(400).json({ mensaje: 'Número de orden inválido' });
+      return;
+    }
+    const orden = await ordenesService.obtenerOrdenPorNumero(numero);
+    res.json(orden);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const obtenerMaximoNumeroHandler = async (_req: RequestConUsuario, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const maximo = await ordenesService.obtenerMaximoNumero();
+    res.json({ maximo });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const actualizarOrdenHandler = async (req: RequestConUsuario, res: Response, next: NextFunction): Promise<void> => {
   try {
     const orden = await ordenesService.actualizarOrden(req.params.id, req.body);
@@ -53,7 +76,10 @@ export const actualizarOrdenHandler = async (req: RequestConUsuario, res: Respon
 export const calcularHandler = async (req: RequestConUsuario, res: Response, next: NextFunction): Promise<void> => {
   try {
     const parsed = calcularSchema.parse(req.body);
-    const resultado = calcularOrden(parsed.lineas, parsed.descuento);
+    const resultado = calcularOrden(
+      parsed.lineas.map((l) => ({ descripcion: l.descripcion, cantidad: l.cantidad, precioUnit: l.precioUnit })),
+      parsed.descuento,
+    );
     res.json(resultado);
   } catch (err) {
     next(err);
