@@ -1,10 +1,14 @@
-import { LineaOrdenInput } from '../schemas/ordenes.schema';
+export interface LineaCalculo {
+  descripcion: string;
+  cantidad: number;
+  precioUnit: number;
+}
 
 export interface ResultadoCalculo {
   subtotal: number;
   descuentoMonto: number;
   total: number;
-  lineas: Array<{ subtotal: number } & LineaOrdenInput>;
+  lineas: Array<{ subtotal: number } & LineaCalculo>;
 }
 
 /**
@@ -12,7 +16,7 @@ export interface ResultadoCalculo {
  * El servidor es la fuente canónica de los cálculos.
  */
 export const calcularOrden = (
-  lineas: LineaOrdenInput[],
+  lineas: LineaCalculo[],
   descuentoPorcentaje: number = 0,
 ): ResultadoCalculo => {
   const lineasCalculadas = lineas.map((linea) => ({

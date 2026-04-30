@@ -9,6 +9,7 @@ import rateLimit from 'express-rate-limit';
 import authRoutes from './routes/auth.routes';
 import clientesRoutes from './routes/clientes.routes';
 import ordenesRoutes from './routes/ordenes.routes';
+import articulosRoutes from './routes/articulos.routes';
 import { manejarErrores } from './middleware/error.middleware';
 
 const app = express();
@@ -42,6 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/clientes', clientesRoutes);
 app.use('/api/ordenes', ordenesRoutes);
+app.use('/api/articulos', articulosRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {

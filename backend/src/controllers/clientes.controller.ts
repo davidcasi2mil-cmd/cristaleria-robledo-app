@@ -49,3 +49,17 @@ export const eliminarClienteHandler = async (req: RequestConUsuario, res: Respon
     next(err);
   }
 };
+
+export const buscarClientePorTelefonoHandler = async (req: RequestConUsuario, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const telefono = req.query.telefono as string;
+    if (!telefono) {
+      res.status(400).json({ mensaje: 'El parámetro telefono es requerido' });
+      return;
+    }
+    const cliente = await clientesService.buscarClientePorTelefono(telefono);
+    res.json(cliente ?? null);
+  } catch (err) {
+    next(err);
+  }
+};

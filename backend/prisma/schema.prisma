@@ -20,6 +20,14 @@ enum EstadoOrden {
   CANCELADA
 }
 
+enum TipoArticulo {
+  CRISTAL
+  MOLDURA
+  PASSPARTOUS
+  ACCESORIO
+  EXTRA
+}
+
 model Usuario {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -45,6 +53,22 @@ model Cliente {
 
   @@index([nombre])
   @@index([email])
+  @@index([telefono])
+}
+
+model Articulo {
+  id          String       @id @default(cuid())
+  tipo        TipoArticulo
+  referencia  String
+  descripcion String
+  precio      Decimal      @db.Decimal(10, 2)
+  perfil      Decimal?     @db.Decimal(10, 2)
+  activo      Boolean      @default(true)
+  creadoEn    DateTime     @default(now())
+  lineas      OrdenLinea[]
+
+  @@unique([tipo, referencia])
+  @@index([tipo])
 }
 
 model Orden {
@@ -54,6 +78,8 @@ model Orden {
   usuarioId     String
   estado        EstadoOrden @default(PENDIENTE)
   notas         String?
+  anchoOriginal Decimal?    @db.Decimal(10, 2)
+  altoOriginal  Decimal?    @db.Decimal(10, 2)
   subtotal      Decimal     @db.Decimal(10, 2)
   descuento     Decimal     @db.Decimal(10, 2) @default(0)
   total         Decimal     @db.Decimal(10, 2)
@@ -70,13 +96,21 @@ model Orden {
 }
 
 model OrdenLinea {
-  id          String  @id @default(cuid())
+  id          String       @id @default(cuid())
   ordenId     String
+  tipo        TipoArticulo @default(EXTRA)
+  articuloId  String?
+  referencia  String?
   descripcion String
-  cantidad    Decimal @db.Decimal(10, 2)
-  precioUnit  Decimal @db.Decimal(10, 2)
-  subtotal    Decimal @db.Decimal(10, 2)
-  orden       Orden   @relation(fields: [ordenId], references: [id], onDelete: Cascade)
+  cantidad    Decimal      @db.Decimal(10, 2)
+  precioUnit  Decimal      @db.Decimal(10, 2)
+  perfil      Decimal?     @db.Decimal(10, 2)
+  ancho       Decimal?     @db.Decimal(10, 2)
+  alto        Decimal?     @db.Decimal(10, 2)
+  subtotal    Decimal      @db.Decimal(10, 2)
+  orden       Orden        @relation(fields: [ordenId], references: [id], onDelete: Cascade)
+  articulo    Articulo?    @relation(fields: [articuloId], references: [id])
 
   @@index([ordenId])
+  @@index([articuloId])
 }

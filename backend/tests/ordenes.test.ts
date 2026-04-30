@@ -5,13 +5,15 @@ import { calcularOrden } from '../src/services/calculo.service';
 
 jest.mock('@prisma/client', () => {
   const mockPrisma = {
-    cliente: { findUnique: jest.fn() },
+    cliente: { findUnique: jest.fn(), findFirst: jest.fn(), create: jest.fn() },
+    articulo: { findUnique: jest.fn(), create: jest.fn() },
     orden: {
       create: jest.fn(),
       findMany: jest.fn(),
       count: jest.fn(),
       findUnique: jest.fn(),
       update: jest.fn(),
+      aggregate: jest.fn(),
     },
     $transaction: jest.fn(),
     $disconnect: jest.fn(),
@@ -20,6 +22,13 @@ jest.mock('@prisma/client', () => {
     PrismaClient: jest.fn().mockImplementation(() => mockPrisma),
     Prisma: {
       Decimal: jest.fn().mockImplementation((v: any) => ({ value: v })),
+    },
+    TipoArticulo: {
+      CRISTAL: 'CRISTAL',
+      MOLDURA: 'MOLDURA',
+      PASSPARTOUS: 'PASSPARTOUS',
+      ACCESORIO: 'ACCESORIO',
+      EXTRA: 'EXTRA',
     },
   };
 });
@@ -123,7 +132,8 @@ describe('Ordenes endpoints', () => {
         .set('Authorization', `Bearer ${tokenAdmin}`)
         .send({
           clienteId: 'cliente-1',
-          lineas: [{ descripcion: 'Vidrio 4mm', cantidad: 1, precioUnit: 50000 }],
+          clienteNombre: 'Cliente Test',
+          lineas: [{ tipo: 'CRISTAL', descripcion: 'Vidrio 4mm', cantidad: 1, precioUnit: 50000 }],
         });
 
       expect(res.status).toBe(201);
@@ -138,7 +148,8 @@ describe('Ordenes endpoints', () => {
         .set('Authorization', `Bearer ${tokenAdmin}`)
         .send({
           clienteId: 'nonexistent',
-          lineas: [{ descripcion: 'Vidrio', cantidad: 1, precioUnit: 50000 }],
+          clienteNombre: 'Cliente Test',
+          lineas: [{ tipo: 'CRISTAL', descripcion: 'Vidrio', cantidad: 1, precioUnit: 50000 }],
         });
 
       expect(res.status).toBe(404);
@@ -153,7 +164,8 @@ describe('Ordenes endpoints', () => {
         .set('Authorization', `Bearer ${tokenAdmin}`)
         .send({
           clienteId: 'cliente-1',
-          lineas: [{ descripcion: 'Vidrio', cantidad: 1, precioUnit: 50000 }],
+          clienteNombre: 'Cliente Test',
+          lineas: [{ tipo: 'CRISTAL', descripcion: 'Vidrio', cantidad: 1, precioUnit: 50000 }],
         });
 
       expect(res.status).toBe(404);
@@ -214,7 +226,7 @@ describe('Ordenes endpoints', () => {
         .post('/api/ordenes/calcular')
         .set('Authorization', `Bearer ${tokenAdmin}`)
         .send({
-          lineas: [{ descripcion: 'Vidrio', cantidad: 2, precioUnit: 50000 }],
+          lineas: [{ tipo: 'CRISTAL', descripcion: 'Vidrio', cantidad: 2, precioUnit: 50000 }],
           descuento: 10,
         });
 

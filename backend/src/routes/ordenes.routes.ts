@@ -6,6 +6,8 @@ import {
   crearOrdenHandler,
   obtenerOrdenesHandler,
   obtenerOrdenPorIdHandler,
+  obtenerOrdenPorNumeroHandler,
+  obtenerMaximoNumeroHandler,
   actualizarOrdenHandler,
   calcularHandler,
 } from '../controllers/ordenes.controller';
@@ -17,6 +19,8 @@ router.use(autenticar);
 router.get('/', obtenerOrdenesHandler);
 router.post('/', validar(ordenSchema), crearOrdenHandler);
 router.post('/calcular', calcularHandler);
+router.get('/maximo', obtenerMaximoNumeroHandler);
+router.get('/numero/:numero', obtenerOrdenPorNumeroHandler);
 router.get('/:id', obtenerOrdenPorIdHandler);
 router.put('/:id', validar(actualizarOrdenSchema), actualizarOrdenHandler);
 
