@@ -80,6 +80,8 @@ model Orden {
   notas         String?
   anchoOriginal Decimal?    @db.Decimal(10, 2)
   altoOriginal  Decimal?    @db.Decimal(10, 2)
+  fechaOrden    DateTime?
+  fechaEntrega  DateTime?
   subtotal      Decimal     @db.Decimal(10, 2)
   descuento     Decimal     @db.Decimal(10, 2) @default(0)
   total         Decimal     @db.Decimal(10, 2)

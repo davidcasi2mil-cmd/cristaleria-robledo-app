@@ -59,6 +59,8 @@ export default function NuevaOrdenPage() {
   const [clienteEncontrado, setClienteEncontrado] = useState(false);
   const telefonoDebounce = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const todayStr = () => new Date().toISOString().split('T')[0];
+
   const {
     register,
     control,
@@ -72,6 +74,8 @@ export default function NuevaOrdenPage() {
     defaultValues: {
       clienteNombre: '',
       clienteTelefono: '',
+      fechaOrden: todayStr(),
+      fechaEntrega: '',
       lineas: [emptyLinea()],
       descuento: 0,
       notas: '',
@@ -129,6 +133,8 @@ export default function NuevaOrdenPage() {
         reset({
           clienteNombre: '',
           clienteTelefono: '',
+          fechaOrden: todayStr(),
+          fechaEntrega: '',
           lineas: [emptyLinea()],
           descuento: 0,
           notas: '',
@@ -146,6 +152,8 @@ export default function NuevaOrdenPage() {
           clienteId: orden.clienteId,
           clienteNombre: orden.cliente?.nombre ?? '',
           clienteTelefono: orden.cliente?.telefono ?? '',
+          fechaOrden: orden.fechaOrden ? (orden.fechaOrden as string).split('T')[0] : todayStr(),
+          fechaEntrega: orden.fechaEntrega ? (orden.fechaEntrega as string).split('T')[0] : '',
           anchoOriginal: orden.anchoOriginal ? Number(orden.anchoOriginal) : undefined,
           altoOriginal: orden.altoOriginal ? Number(orden.altoOriginal) : undefined,
           descuento: orden.descuento ? Number(orden.descuento) : 0,
@@ -355,6 +363,8 @@ export default function NuevaOrdenPage() {
                 reset({
                   clienteNombre: '',
                   clienteTelefono: '',
+                  fechaOrden: todayStr(),
+                  fechaEntrega: '',
                   lineas: [emptyLinea()],
                   descuento: 0,
                   notas: '',
@@ -430,35 +440,60 @@ export default function NuevaOrdenPage() {
               </div>
             </div>
 
-            {/* Original size */}
+            {/* Dates */}
             <div>
-              <h2 className="label mb-3">Medida Original</h2>
-              <div className="flex gap-2 items-end">
+              <h2 className="label mb-3">Fechas</h2>
+              <div className="flex gap-3">
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-500 mb-1">Ancho (cm)</label>
+                  <label className="block text-xs text-gray-500 mb-1">Fecha orden</label>
                   <input
-                    {...register('anchoOriginal', { valueAsNumber: true })}
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    placeholder="X"
+                    {...register('fechaOrden')}
+                    type="date"
                     disabled={modoEdicion}
                     className={INPUT_CLS}
                   />
                 </div>
-                <span className="text-gray-300 pb-2 text-lg font-light" aria-hidden="true">×</span>
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-500 mb-1">Alto (cm)</label>
+                  <label className="block text-xs text-gray-500 mb-1">Fecha entrega</label>
                   <input
-                    {...register('altoOriginal', { valueAsNumber: true })}
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    placeholder="Y"
+                    {...register('fechaEntrega')}
+                    type="date"
                     disabled={modoEdicion}
                     className={INPUT_CLS}
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Original size */}
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <h2 className="label mb-3">Medida Original</h2>
+            <div className="flex gap-2 items-end max-w-xs">
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">Ancho (cm)</label>
+                <input
+                  {...register('anchoOriginal', { valueAsNumber: true })}
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  placeholder="X"
+                  disabled={modoEdicion}
+                  className={INPUT_CLS}
+                />
+              </div>
+              <span className="text-gray-300 pb-2 text-lg font-light" aria-hidden="true">×</span>
+              <div className="flex-1">
+                <label className="block text-xs text-gray-500 mb-1">Alto (cm)</label>
+                <input
+                  {...register('altoOriginal', { valueAsNumber: true })}
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  placeholder="Y"
+                  disabled={modoEdicion}
+                  className={INPUT_CLS}
+                />
               </div>
             </div>
           </div>
@@ -724,6 +759,8 @@ export default function NuevaOrdenPage() {
                 reset({
                   clienteNombre: '',
                   clienteTelefono: '',
+                  fechaOrden: todayStr(),
+                  fechaEntrega: '',
                   lineas: [emptyLinea()],
                   descuento: 0,
                   notas: '',

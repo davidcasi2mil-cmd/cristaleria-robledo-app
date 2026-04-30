@@ -16,6 +16,8 @@ export const ordenSchema = z.object({
   clienteId: z.string().optional(),
   clienteNombre: z.string().min(2, 'El nombre del cliente es requerido'),
   clienteTelefono: z.string().optional(),
+  fechaOrden: z.coerce.date().optional(),
+  fechaEntrega: z.coerce.date().optional(),
   notas: z.string().optional(),
   descuento: z.number().min(0).max(100).optional().default(0),
   anchoOriginal: z.number().min(0).optional(),

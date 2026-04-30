@@ -68,6 +68,8 @@ export const crearOrden = async (data: OrdenInput, usuarioId: string) => {
         notas: data.notas,
         anchoOriginal: data.anchoOriginal != null ? new Prisma.Decimal(data.anchoOriginal) : null,
         altoOriginal: data.altoOriginal != null ? new Prisma.Decimal(data.altoOriginal) : null,
+        fechaOrden: data.fechaOrden ?? new Date(),
+        fechaEntrega: data.fechaEntrega ?? null,
         subtotal: new Prisma.Decimal(calculo.subtotal),
         descuento: new Prisma.Decimal(calculo.descuentoMonto),
         total: new Prisma.Decimal(calculo.total),
