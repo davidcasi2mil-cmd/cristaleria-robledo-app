@@ -44,8 +44,13 @@ cp .env.example .env
 # Editar .env con tu configuración de base de datos
 npm install
 npx prisma migrate dev
+npx prisma db seed   # Crea el usuario administrador inicial
 npm run dev
 ```
+
+> El seed crea el usuario **admin@cristaleria.com** con contraseña **Admin1234!** (rol ADMIN).
+> Puedes sobreescribir estos valores con las variables de entorno `SEED_ADMIN_EMAIL` y `SEED_ADMIN_PASSWORD` antes de ejecutar el seed.
+> **Cambia la contraseña tras el primer inicio de sesión.**
 
 ### 3. Configurar el frontend
 
@@ -107,6 +112,7 @@ npm run build      # Compilar TypeScript
 npm start          # Servidor de producción
 npm run typecheck  # Verificar tipos
 npm test           # Ejecutar tests
+npm run prisma:seed # Crear usuario administrador inicial
 ```
 
 ### Frontend
