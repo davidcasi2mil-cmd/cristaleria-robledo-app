@@ -151,7 +151,17 @@ export default function NuevaOrdenPage() {
           descuento: orden.descuento ? Number(orden.descuento) : 0,
           notas: orden.notas ?? '',
           lineas:
-            orden.lineas?.map((l: any) => ({
+            orden.lineas?.map((l: {
+              tipo?: string;
+              articuloId?: string;
+              referencia?: string;
+              descripcion?: string;
+              cantidad: number | string;
+              precioUnit: number | string;
+              perfil?: number | string | null;
+              ancho?: number | string | null;
+              alto?: number | string | null;
+            }) => ({
               tipo: l.tipo ?? 'EXTRA',
               articuloId: l.articuloId ?? '',
               referencia: l.referencia ?? '',
