@@ -5,8 +5,11 @@ import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store';
-import { ordenSchema, OrdenInput, TIPOS_ARTICULO, TipoArticulo } from '@/lib/schemas';
+import { ordenFormSchema, OrdenFormInput, TIPOS_ARTICULO, TipoArticulo } from '@/lib/schemas';
 import api from '@/lib/api';
+
+const MIN_PHONE_LENGTH = 6;
+const PHONE_DEBOUNCE_MS = 400;
 
 interface Articulo {
   id: string;
@@ -64,8 +67,8 @@ export default function NuevaOrdenPage() {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<OrdenInput>({
-    resolver: zodResolver(ordenSchema),
+  } = useForm<OrdenFormInput>({
+    resolver: zodResolver(ordenFormSchema),
     defaultValues: {
       clienteNombre: '',
       clienteTelefono: '',
@@ -189,7 +192,7 @@ export default function NuevaOrdenPage() {
   const handleTelefonoChange = (val: string) => {
     setValue('clienteTelefono', val);
     if (telefonoDebounce.current) clearTimeout(telefonoDebounce.current);
-    if (val.length >= 6) {
+    if (val.length >= MIN_PHONE_LENGTH) {
       telefonoDebounce.current = setTimeout(async () => {
         try {
           const res = await api.get('/clientes/buscar', { params: { telefono: val } });
@@ -203,7 +206,7 @@ export default function NuevaOrdenPage() {
         } catch {
           setClienteEncontrado(false);
         }
-      }, 400);
+      }, PHONE_DEBOUNCE_MS);
     } else {
       setClienteEncontrado(false);
     }
@@ -240,25 +243,29 @@ export default function NuevaOrdenPage() {
   const referenciasPorTipo = (tipo: TipoArticulo) =>
     articulos.filter((a) => a.tipo === tipo).map((a) => a.referencia);
 
-  const calcularSubtotalLinea = (l: OrdenInput['lineas'][number]) => {
+  const calcularSubtotalLinea = (l: OrdenFormInput['lineas'][number]) => {
     const q = Number(l?.cantidad) || 0;
     const p = Number(l?.precioUnit) || 0;
     return q * p;
   };
 
-  const onSubmit = async (data: OrdenInput) => {
+  const onSubmit = async (data: OrdenFormInput) => {
     if (modoEdicion) return;
     setSubmitting(true);
     setError('');
     try {
-      // Filter out completely empty lines (no description)
+      // Filter out empty placeholder lines (no description) before sending to the API
       const lineasValidas = data.lineas.filter((l) => l.descripcion?.trim());
+      if (lineasValidas.length === 0) {
+        setError('Agrega al menos una línea con descripción');
+        return;
+      }
       const res = await api.post('/ordenes', {
         ...data,
         lineas: lineasValidas.map((l) => ({
           ...l,
-          cantidad: Number(l.cantidad),
-          precioUnit: Number(l.precioUnit),
+          cantidad: Number(l.cantidad ?? 1),
+          precioUnit: Number(l.precioUnit ?? 0),
           perfil: l.perfil != null ? Number(l.perfil) : undefined,
           ancho: l.ancho != null ? Number(l.ancho) : undefined,
           alto: l.alto != null ? Number(l.alto) : undefined,

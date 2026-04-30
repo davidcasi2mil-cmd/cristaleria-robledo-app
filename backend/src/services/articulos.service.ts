@@ -29,7 +29,7 @@ export const crearArticulo = async (data: ArticuloInput) => {
 };
 
 export const obtenerArticulos = async (tipo?: string) => {
-  const where: any = { activo: true };
+  const where: Prisma.ArticuloWhereInput = { activo: true };
   if (tipo) where.tipo = tipo as TipoArticulo;
   return prisma.articulo.findMany({
     where,
