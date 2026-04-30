@@ -44,6 +44,7 @@ export const obtenerArticuloPorId = async (id: string) => {
 };
 
 export const buscarOCrearArticulo = async (tipo: TipoArticulo, referencia: string, descripcion: string, precio: number, perfil?: number) => {
+  // Reusable helper: find an existing article by tipo+referencia or create a new one
   const existe = await prisma.articulo.findUnique({
     where: { tipo_referencia: { tipo, referencia } },
   });
