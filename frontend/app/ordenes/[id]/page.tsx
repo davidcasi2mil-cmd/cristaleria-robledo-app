@@ -171,7 +171,7 @@ export default function DetalleOrdenPage({ params }: { params: Promise<{ id: str
           <div className="card p-5">
             <p className="label mb-3">Medida Original</p>
             <p className="text-2xl font-bold text-gray-900">
-              {Number(orden.anchoOriginal).toFixed(1)} <span className="text-gray-400 font-normal text-lg">×</span> {Number(orden.altoOriginal).toFixed(1)}
+              {Number(orden.anchoOriginal).toFixed(1)} <span className="text-gray-400 font-normal text-lg" aria-hidden="true">×</span> {Number(orden.altoOriginal).toFixed(1)}
               <span className="text-sm font-normal text-gray-500 ml-1">cm</span>
             </p>
           </div>

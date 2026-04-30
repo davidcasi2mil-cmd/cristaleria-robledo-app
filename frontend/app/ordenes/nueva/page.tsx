@@ -446,7 +446,7 @@ export default function NuevaOrdenPage() {
                     className={INPUT_CLS}
                   />
                 </div>
-                <span className="text-gray-300 pb-2 text-lg font-light">×</span>
+                <span className="text-gray-300 pb-2 text-lg font-light" aria-hidden="true">×</span>
                 <div className="flex-1">
                   <label className="block text-xs text-gray-500 mb-1">Alto (cm)</label>
                   <input
