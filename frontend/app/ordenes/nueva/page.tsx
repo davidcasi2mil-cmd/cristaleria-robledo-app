@@ -29,9 +29,9 @@ const TIPO_LABELS: Record<TipoArticulo, string> = {
 };
 
 const INPUT_CLS =
-  'w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
+  'w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-150';
 const SELECT_CLS =
-  'w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white';
+  'w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-150';
 
 const emptyLinea = () => ({
   tipo: 'CRISTAL' as TipoArticulo,
@@ -303,25 +303,25 @@ export default function NuevaOrdenPage() {
   return (
     <div className="max-w-full">
       {/* Header: Order number + navigation */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => handleNavNumero(-1)}
             disabled={loadingOrden || (numeroActual ?? 1) <= 1}
-            className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-40 text-gray-700 font-bold"
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 text-gray-500 transition-colors"
             title="Orden anterior"
           >
             ◀
           </button>
           <div className="flex items-center gap-1">
-            <span className="text-sm font-medium text-gray-600">#</span>
+            <span className="text-sm font-semibold text-gray-400">#</span>
             <input
               type="number"
               min="1"
               value={mostrarNumero ?? ''}
               onChange={(e) => handleNumeroChange(e.target.value)}
-              className="w-20 border border-gray-300 rounded px-2 py-1 text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-20 border border-gray-200 rounded-lg px-2 py-1.5 text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               title="Número de orden"
             />
           </div>
@@ -329,18 +329,18 @@ export default function NuevaOrdenPage() {
             type="button"
             onClick={() => handleNavNumero(1)}
             disabled={loadingOrden || (numeroActual ?? maxNumero + 1) > maxNumero}
-            className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-40 text-gray-700 font-bold"
+            className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 text-gray-500 transition-colors"
             title="Orden siguiente"
           >
             ▶
           </button>
           {modoEdicion && (
-            <span className="ml-2 px-2 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium">
+            <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold ring-1 ring-amber-200">
               Vista previa
             </span>
           )}
           {isNuevaOrden && (
-            <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full font-medium">
+            <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold ring-1 ring-emerald-200">
               Nueva orden
             </span>
           )}
@@ -360,34 +360,44 @@ export default function NuevaOrdenPage() {
                   notas: '',
                 });
               }}
-              className="bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-1.5 rounded transition-colors"
+              className="btn-success text-sm flex items-center gap-1.5"
             >
-              + Nueva Orden
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Nueva Orden
             </button>
           )}
         </div>
       </div>
 
       {loadingOrden && (
-        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-2 rounded mb-3 text-sm">
+        <div className="flex items-center gap-2 bg-indigo-50 border border-indigo-200 text-indigo-700 px-4 py-2.5 rounded-lg mb-4 text-sm">
+          <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
           Cargando orden...
         </div>
       )}
 
       {error && (
-        <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-2 rounded mb-3 text-sm">
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-lg mb-4 text-sm">
+          <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+          </svg>
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Client + Sizes row */}
-        <div className="bg-white rounded-lg shadow border p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="card p-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Client */}
             <div>
-              <h2 className="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">Cliente</h2>
-              <div className="flex gap-2">
+              <h2 className="label mb-3">Cliente</h2>
+              <div className="flex gap-3">
                 <div className="flex-1">
                   <label className="block text-xs text-gray-500 mb-1">Teléfono</label>
                   <div className="relative">
@@ -400,7 +410,7 @@ export default function NuevaOrdenPage() {
                       className={INPUT_CLS}
                     />
                     {clienteEncontrado && (
-                      <span className="absolute right-2 top-1.5 text-green-600 text-xs">✓ encontrado</span>
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-emerald-600 text-xs font-medium">✓</span>
                     )}
                   </div>
                 </div>
@@ -414,7 +424,7 @@ export default function NuevaOrdenPage() {
                     className={INPUT_CLS}
                   />
                   {errors.clienteNombre && (
-                    <p className="text-red-500 text-xs mt-0.5">{errors.clienteNombre.message}</p>
+                    <p className="text-red-500 text-xs mt-1">{errors.clienteNombre.message}</p>
                   )}
                 </div>
               </div>
@@ -422,7 +432,7 @@ export default function NuevaOrdenPage() {
 
             {/* Original size */}
             <div>
-              <h2 className="font-semibold text-gray-700 mb-3 text-sm uppercase tracking-wide">Medida Original</h2>
+              <h2 className="label mb-3">Medida Original</h2>
               <div className="flex gap-2 items-end">
                 <div className="flex-1">
                   <label className="block text-xs text-gray-500 mb-1">Ancho (cm)</label>
@@ -436,7 +446,7 @@ export default function NuevaOrdenPage() {
                     className={INPUT_CLS}
                   />
                 </div>
-                <span className="text-gray-400 pb-1.5">×</span>
+                <span className="text-gray-300 pb-2 text-lg font-light" aria-hidden="true">×</span>
                 <div className="flex-1">
                   <label className="block text-xs text-gray-500 mb-1">Alto (cm)</label>
                   <input
@@ -455,14 +465,14 @@ export default function NuevaOrdenPage() {
         </div>
 
         {/* Order lines */}
-        <div className="bg-white rounded-lg shadow border">
-          <div className="p-3 border-b flex items-center justify-between">
-            <h2 className="font-semibold text-gray-700 text-sm uppercase tracking-wide">Artículos</h2>
+        <div className="card overflow-hidden">
+          <div className="card-header flex items-center justify-between">
+            <h2 className="font-semibold text-gray-800 text-sm">Artículos</h2>
             {!modoEdicion && (
               <button
                 type="button"
                 onClick={() => append(emptyLinea())}
-                className="bg-blue-700 hover:bg-blue-800 text-white text-xs px-3 py-1 rounded transition-colors"
+                className="btn-primary text-xs py-1.5 px-3"
               >
                 + Añadir línea
               </button>
@@ -472,19 +482,19 @@ export default function NuevaOrdenPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 border-b">
-                  <th className="text-left px-2 py-2 text-xs font-medium text-gray-500 w-28">Tipo</th>
-                  <th className="text-left px-2 py-2 text-xs font-medium text-gray-500 w-28">Referencia</th>
-                  <th className="text-left px-2 py-2 text-xs font-medium text-gray-500">Descripción</th>
-                  <th className="text-right px-2 py-2 text-xs font-medium text-gray-500 w-20">P. unit.</th>
-                  <th className="text-right px-2 py-2 text-xs font-medium text-gray-500 w-20">Uds/Perfil</th>
-                  <th className="text-right px-2 py-2 text-xs font-medium text-gray-500 w-20">Ancho</th>
-                  <th className="text-right px-2 py-2 text-xs font-medium text-gray-500 w-20">Alto</th>
-                  <th className="text-right px-2 py-2 text-xs font-medium text-gray-500 w-24">Subtotal</th>
+                <tr className="bg-gray-50/70 border-b border-gray-100">
+                  <th className="text-left px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-28">Tipo</th>
+                  <th className="text-left px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-28">Referencia</th>
+                  <th className="text-left px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">Descripción</th>
+                  <th className="text-right px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-20">P. unit.</th>
+                  <th className="text-right px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-20">Uds/Perfil</th>
+                  <th className="text-right px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-20">Ancho</th>
+                  <th className="text-right px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-20">Alto</th>
+                  <th className="text-right px-2.5 py-2.5 text-xs font-semibold text-gray-500 uppercase tracking-wide w-24">Subtotal</th>
                   {!modoEdicion && <th className="w-8"></th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-50">
                 {fields.map((field, index) => {
                   const linea = lineas?.[index];
                   const tipo = (linea?.tipo ?? 'CRISTAL') as TipoArticulo;
@@ -493,9 +503,9 @@ export default function NuevaOrdenPage() {
                   const refs = referenciasPorTipo(tipo);
 
                   return (
-                    <tr key={field.id} className="hover:bg-gray-50">
+                    <tr key={field.id} className="hover:bg-slate-50/60 transition-colors">
                       {/* Tipo */}
-                      <td className="px-2 py-1.5">
+                      <td className="px-2.5 py-2">
                         <select
                           value={tipo}
                           onChange={(e) => {
@@ -514,7 +524,7 @@ export default function NuevaOrdenPage() {
                       </td>
 
                       {/* Referencia */}
-                      <td className="px-2 py-1.5">
+                      <td className="px-2.5 py-2">
                         <input
                           list={`refs-${index}`}
                           value={linea?.referencia ?? ''}
@@ -531,7 +541,7 @@ export default function NuevaOrdenPage() {
                       </td>
 
                       {/* Descripción */}
-                      <td className="px-2 py-1.5">
+                      <td className="px-2.5 py-2">
                         <input
                           {...register(`lineas.${index}.descripcion`)}
                           type="text"
@@ -540,12 +550,12 @@ export default function NuevaOrdenPage() {
                           className={INPUT_CLS}
                         />
                         {errors.lineas?.[index]?.descripcion && (
-                          <p className="text-red-500 text-xs">{errors.lineas[index]?.descripcion?.message}</p>
+                          <p className="text-red-500 text-xs mt-0.5">{errors.lineas[index]?.descripcion?.message}</p>
                         )}
                       </td>
 
                       {/* Precio unit */}
-                      <td className="px-2 py-1.5">
+                      <td className="px-2.5 py-2">
                         <input
                           {...register(`lineas.${index}.precioUnit`, { valueAsNumber: true })}
                           type="number"
@@ -558,7 +568,7 @@ export default function NuevaOrdenPage() {
                       </td>
 
                       {/* Cantidad / Perfil */}
-                      <td className="px-2 py-1.5">
+                      <td className="px-2.5 py-2">
                         {mostrarPerfil ? (
                           <input
                             {...register(`lineas.${index}.perfil`, { valueAsNumber: true })}
@@ -584,7 +594,7 @@ export default function NuevaOrdenPage() {
                       </td>
 
                       {/* Ancho */}
-                      <td className="px-2 py-1.5">
+                      <td className="px-2.5 py-2">
                         <input
                           {...register(`lineas.${index}.ancho`, { valueAsNumber: true })}
                           type="number"
@@ -597,7 +607,7 @@ export default function NuevaOrdenPage() {
                       </td>
 
                       {/* Alto */}
-                      <td className="px-2 py-1.5">
+                      <td className="px-2.5 py-2">
                         <input
                           {...register(`lineas.${index}.alto`, { valueAsNumber: true })}
                           type="number"
@@ -610,21 +620,23 @@ export default function NuevaOrdenPage() {
                       </td>
 
                       {/* Subtotal */}
-                      <td className="px-2 py-1.5 text-right font-medium text-gray-800">
+                      <td className="px-2.5 py-2 text-right font-semibold text-gray-800">
                         €{lineaSubtotal.toFixed(2)}
                       </td>
 
                       {/* Remove */}
                       {!modoEdicion && (
-                        <td className="px-1 py-1.5 text-center">
+                        <td className="px-1.5 py-2 text-center">
                           {fields.length > 1 && (
                             <button
                               type="button"
                               onClick={() => remove(index)}
-                              className="text-red-400 hover:text-red-600 text-xs"
+                              className="w-6 h-6 flex items-center justify-center rounded-md text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all"
                               title="Eliminar línea"
                             >
-                              ✕
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
                             </button>
                           )}
                         </td>
@@ -637,12 +649,12 @@ export default function NuevaOrdenPage() {
           </div>
 
           {/* Totals */}
-          <div className="p-4 border-t bg-gray-50">
+          <div className="p-5 border-t border-gray-100 bg-gray-50/50">
             <div className="flex flex-col md:flex-row gap-6 justify-between">
               {/* Notes + Discount */}
               <div className="flex-1 space-y-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Notas</label>
+                  <label className="label mb-1">Notas</label>
                   <textarea
                     {...register('notas')}
                     rows={2}
@@ -652,7 +664,7 @@ export default function NuevaOrdenPage() {
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <label className="text-xs font-medium text-gray-600">Descuento (%):</label>
+                  <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Descuento (%):</label>
                   <input
                     {...register('descuento', { valueAsNumber: true })}
                     type="number"
@@ -660,26 +672,26 @@ export default function NuevaOrdenPage() {
                     max="100"
                     step="0.1"
                     disabled={modoEdicion}
-                    className="w-20 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-20 border border-gray-200 rounded-lg px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                   />
                 </div>
               </div>
 
-              {/* Totals */}
-              <div className="min-w-48 space-y-1 text-sm">
+              {/* Totals summary */}
+              <div className="min-w-52 space-y-2 text-sm">
                 <div className="flex justify-between text-gray-600">
-                  <span>Subtotal:</span>
+                  <span>Subtotal</span>
                   <span>€{subtotal.toFixed(2)}</span>
                 </div>
                 {Number(descuento) > 0 && (
                   <div className="flex justify-between text-red-600">
-                    <span>Descuento ({Number(descuento)}%):</span>
-                    <span>-€{descuentoMonto.toFixed(2)}</span>
+                    <span>Descuento ({Number(descuento)}%)</span>
+                    <span>–€{descuentoMonto.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex justify-between font-bold text-lg border-t pt-1">
-                  <span>Total:</span>
-                  <span className="text-blue-700">€{total.toFixed(2)}</span>
+                <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200">
+                  <span className="text-gray-900">Total</span>
+                  <span className="text-indigo-600">€{total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -692,9 +704,19 @@ export default function NuevaOrdenPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="bg-blue-700 hover:bg-blue-800 text-white font-medium px-6 py-2 rounded transition-colors disabled:opacity-50"
+              className="btn-primary flex items-center gap-2"
             >
-              {submitting ? 'Guardando...' : 'Crear Orden'}
+              {submitting ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Guardando...
+                </>
+              ) : (
+                'Crear Orden'
+              )}
             </button>
             <button
               type="button"
@@ -707,7 +729,7 @@ export default function NuevaOrdenPage() {
                   notas: '',
                 })
               }
-              className="border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium px-6 py-2 rounded transition-colors"
+              className="btn-secondary"
             >
               Limpiar
             </button>
